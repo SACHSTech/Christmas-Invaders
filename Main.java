@@ -1,7 +1,7 @@
 import processing.core.PApplet;
 
 /**
- * Main class to run game
+ * Main class to run game Christmas Invaders
  * @author Preston Wong and Jacky Ho
  *
  */
