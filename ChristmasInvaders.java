@@ -29,6 +29,8 @@ public class ChristmasInvaders extends PApplet {
     int projectileSize = 10; // Size of the projectiles
     int nextProjectileIndex = 0; // Index to track the next available slot in the projectiles array
 
+    boolean gameOver = false; // Checks if the game is over
+
     public void settings() {
         size(1280, 720);
         initializeEnemies();
@@ -37,10 +39,14 @@ public class ChristmasInvaders extends PApplet {
     }
 
     public void draw() {
-        background(255);
-        drawEnemies();
-        drawPlayer();
-        moveProjectiles();
+        if (!gameOver) {
+            background(255);
+            drawEnemies();
+            drawPlayer();
+            moveProjectiles();
+        } else {
+            displayGameOver();
+        }
     }
 
     public void drawEnemies() {
@@ -55,6 +61,27 @@ public class ChristmasInvaders extends PApplet {
             moveEnemiesDown();
         }
     }
+
+    public void moveEnemiesDown() {
+        // Move enemies down in their rows
+        for (int j = 0; j < numRows; j++) {
+            for (int i = 0; i < numCols; i++) {
+                enemies[i][j][1] += spacingY;
+                if (enemies[i][j][1] + enemyRadius >= height) {
+                    gameOver = true;
+                    break; // Exit the function if game-over
+                }
+            }
+        }
+    }
+
+    private void displayGameOver() {
+        textAlign(CENTER, CENTER);
+        textSize(32);
+        fill(255, 0, 0);
+        text("Game Over", width / 2, height / 2);
+    }
+
 
     public void initializeEnemies() {
         enemies = new int[numCols][numRows][2];
@@ -114,19 +141,10 @@ public class ChristmasInvaders extends PApplet {
                         // Reset projectile position on collision
                         projectiles[i][0] = -1;
                         projectiles[i][1] = -1;
-                        enemies[j][k][0] = -1; // Set enemy position off-screen
-                        enemies[j][k][1] = -1;
+                        enemies[j][k][0] = -10; // Set enemy position off-screen
+                        enemies[j][k][1] = -10;
                     }
                 }
-            }
-        }
-    }
-
-    public void moveEnemiesDown() {
-        // Move enemies down in their rows
-        for (int j = 0; j < numRows; j++) {
-            for (int i = 0; i < numCols; i++) {
-                enemies[i][j][1] += spacingY;
             }
         }
     }
